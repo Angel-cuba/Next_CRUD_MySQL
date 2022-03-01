@@ -16,10 +16,16 @@ export default function ProductView({ product }) {
 			<p>{product.price}</p>
 
 			<button
-				className="bg-red-500 hover:bg-red-700 text-white px-3 py-2"
+				className="bg-red-500 hover:bg-red-700 text-white px-3 py-2 rounded"
 				onClick={() => handleDelete(product.id)}
 			>
 				Delete
+			</button>
+			<button
+				className="bg-green-500 hover:bg-green-700 text-white px-5 py-2 ml-3 rounded"
+				onClick={() => router.push('/products/edit/' + product.id)}
+			>
+				Edit
 			</button>
 		</Layout>
 	);

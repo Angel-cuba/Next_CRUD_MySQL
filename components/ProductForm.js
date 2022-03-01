@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function ProductForm() {
 	const router = useRouter();
@@ -9,15 +9,42 @@ export function ProductForm() {
 		description: '',
 		price: '',
 	});
+	const [cardId, setCardId] = useState();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await axios.post('/api/production', card);
+		// if (router.query.id === 'string') {
+		// 	console.log('updating');
+		// } else {
+		// console.log(card);
+		await fetch('http://localhost:3000/api/production', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+
+			body: JSON.stringify(card),
+		});
+		//}
+
 		router.push('/');
 	};
 
 	const handleChange = async (e) => {
 		setCard({ ...card, [e.target.name]: e.target.value });
 	};
+
+	useEffect(() => {
+		if (router.query?.id) {
+			setCardId(router.query.id);
+		}
+	}, []);
+	// useEffect(() => {
+	// 	getProduct(cardId);
+	// }, []);
+	// const getProduct = async (id) => {
+	// 	const res = await axios.get('/api/production/' + id);
+	// 	console.log(res);
+	// 	setCard(res.data);
+	// };
+
 	return (
 		<div className="w-full max-w-xs m-auto p-auto">
 			<form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -27,6 +54,7 @@ export function ProductForm() {
 					name="name"
 					placeholder="Name"
 					onChange={handleChange}
+					value={card.name}
 					className="shadow border rounded py-2 px-3  text-gray-700"
 				/>
 				<label htmlFor="price">Price: </label>
@@ -36,6 +64,7 @@ export function ProductForm() {
 					id="price"
 					placeholder="Price"
 					onChange={handleChange}
+					value={card.price}
 					className="shadow border rounded py-2 px-3 mt-4 text-gray-700"
 				/>
 				<label htmlFor="description">Description: </label>
@@ -44,9 +73,9 @@ export function ProductForm() {
 					rows="4"
 					placeholder="Description..."
 					onChange={handleChange}
+					value={card.description}
 					className="shadow border rounded py-2 px-3  text-gray-700"
 				></textarea>
-
 				<button className="bg-blue-400 hover:bg-blue-600 py-2 px-4 rounded focus:outline-none focus:shadow-outline font-bold text-white">
 					Save your product
 				</button>
