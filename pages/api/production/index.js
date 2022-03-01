@@ -14,11 +14,6 @@ export default async function handler(req, res) {
 			}
 		case 'POST':
 			try {
-				// const { name, description, price } = body;
-				// const result = await pool.query(
-				// 	'INSERT INTO product(name, description, price) VALUES ($1,$2,$3) RETURNING *',
-				// 	[name, description, price]
-
 				const { name, description, price } = body;
 				const querySQL =
 					'INSERT INTO product(name, description, price) VALUES ($1, $2, $3) RETURNING *';

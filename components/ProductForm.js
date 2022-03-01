@@ -12,17 +12,20 @@ export function ProductForm() {
 	const [cardId, setCardId] = useState();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// if (router.query.id === 'string') {
-		// 	console.log('updating');
-		// } else {
-		// console.log(card);
-		await fetch('http://localhost:3000/api/production', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+		if (router.query.id) {
+			await fetch('http://localhost:3000/api/production/' + router.query.id, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(card),
+			});
+		} else {
+			await fetch('http://localhost:3000/api/production', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
 
-			body: JSON.stringify(card),
-		});
-		//}
+				body: JSON.stringify(card),
+			});
+		}
 
 		router.push('/');
 	};
@@ -35,16 +38,15 @@ export function ProductForm() {
 		if (router.query?.id) {
 			setCardId(router.query.id);
 		}
-	}, []);
-	// useEffect(() => {
-	// 	getProduct(cardId);
-	// }, []);
-	// const getProduct = async (id) => {
-	// 	const res = await axios.get('/api/production/' + id);
-	// 	console.log(res);
-	// 	setCard(res.data);
-	// };
-
+	}, [router]);
+	useEffect(() => {
+		if (router.query.id) {
+			getProduct(router.query.id).then((response) => {
+				setCard(response.data.rows[0]);
+			});
+		}
+	}, [router]);
+	const getProduct = async (id) => await axios.get('/api/production/' + id);
 	return (
 		<div className="w-full max-w-xs m-auto p-auto">
 			<form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
