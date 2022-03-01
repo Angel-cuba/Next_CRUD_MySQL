@@ -1,26 +1,27 @@
 import axios from 'axios';
-import { ProductForm } from '../components/ProductForm';
+import Link from 'next/link';
+import Layout from '../components/Layout';
 
 export default function Home({ products }) {
-	console.log(products);
 	return (
-		<div className="text-3xl font-bold underline">
-			<ProductForm />
-			<h3>Hola</h3>
+		<Layout>
 			{products.map((p) => (
-				<div key={p.id}>
-					<h1>{p.name}</h1>
-					<h2>{p.description}</h2>
-					<h3>{p.price}</h3>
-				</div>
+				<Link key={p.id} href={`/products/${p.id}`}>
+					<a href="">
+						<div className="border border-gray-300 shadow-md p-6">
+							<h1>{p.name}</h1>
+							<h2>{p.description}</h2>
+							<h3>{p.price}</h3>
+						</div>
+					</a>
+				</Link>
 			))}
-		</div>
+		</Layout>
 	);
 }
 
 export const getServerSideProps = async (context) => {
 	const res = await axios.get('http://localhost:3000/api/production');
-	console.log(res.data);
 	return {
 		props: {
 			products: res.data,
