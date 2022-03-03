@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 
 export default function ProductView() {
@@ -10,7 +10,7 @@ export default function ProductView() {
 		await axios.delete('/api/production/' + id);
 		router.push('/');
 	};
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (router.query.id) {
 			res(router.query.id).then((response) => {
 				setProduct(response.data.rows[0]);

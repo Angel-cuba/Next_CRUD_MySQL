@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export function ProductForm() {
 	const router = useRouter();
@@ -12,21 +13,25 @@ export function ProductForm() {
 	const [cardId, setCardId] = useState();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (router.query.id) {
-			await fetch('http://localhost:3000/api/production/' + router.query.id, {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(card),
-			});
-		} else {
-			await fetch('http://localhost:3000/api/production', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-
-				body: JSON.stringify(card),
-			});
+		try {
+			if (router.query.id) {
+				await fetch('http://localhost:3000/api/production/' + router.query.id, {
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(card),
+				});
+				toast.success('Product updated');
+			} else {
+				await fetch('http://localhost:3000/api/production', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(card),
+				});
+				toast('U will see a new post there...');
+			}
+		} catch (error) {
+			console.log(error);
 		}
-
 		router.push('/');
 	};
 
